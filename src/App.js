@@ -1,13 +1,19 @@
-import beetle from './beetle.jpg';
+//import beetle from './Green_beetle.svg';
+//import beetle2 from './beetle.jpg';
 import './App.css';
 import React from 'react';
 
 function Bug(props){
+  const x=props.x;
+  const y=props.y;
   return (
-    <span>
-    <img src={beetle} width="100" height="100" onClick={props.onClick}></img>
-    <div>{props.id}</div>
-    </span>
+    <g>
+      <circle cx={x} cy={y} r={20} stroke="green" fill="green" strokeWidth="4" onClick={props.onClick}/>
+      <line x1={x} y1={y} x2={x+30} y2={y+30} stroke="green" fill="green" strokeWidth="4"/>
+      <line x1={x} y1={y} x2={x+30} y2={y-30} stroke="green" fill="green" strokeWidth="4"/>
+      <line x1={x} y1={y} x2={x-30} y2={y+30} stroke="green" fill="green" strokeWidth="4"/>
+      <line x1={x} y1={y} x2={x-30} y2={y-30} stroke="green" fill="green" strokeWidth="4"/>
+    </g>
   )
 }
 
@@ -20,14 +26,14 @@ class Game extends React.Component {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
     setInterval(this.newBug.bind(this),1000)
   }
 
   newBug() {
     var newBugs=this.state.bugs;
     var i = this.state.n;
-    newBugs.push(<Bug onClick={()=> this.handleClick(i)} id={i}></Bug>)
+    newBugs.push(<Bug onClick={()=> this.handleClick(i)} id={i} x={500*Math.random()} y={500*Math.random()} />)
     this.setState({
       bugs:newBugs,
       n:this.state.n+1
@@ -36,8 +42,10 @@ class Game extends React.Component {
 
   handleClick(n) {
     var newBugs=this.state.bugs;
+    console.log(this.state.bugs.length);
     for (var i=0;i<this.state.bugs.length;i++) {
-      if (this.state.bugs[i].props.id == n) {
+      console.log(i);
+      if (this.state.bugs[i].props.id === n) {
         newBugs.splice(i,1);
       }
     }
@@ -48,16 +56,16 @@ class Game extends React.Component {
 
   render() {
     return (
-      <ul>
+      <svg width="500" height="500">
         {this.state.bugs}
-      </ul>
+      </svg>
     )
   }
 }
 
 function App() {
   return (
-    <Game></Game>
+    <Game/>
   );
 }
 
